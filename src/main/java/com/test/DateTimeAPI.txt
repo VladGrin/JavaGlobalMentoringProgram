@@ -1,0 +1,11 @@
+Core ideas:
+    immutable
+    A time is a time, a date is a date. Not always both (like java.util.Date)
+    Not everyone uses the same calendar (the same Chronologyn)
+
+LocalDate, LocalTime, LocalDateTime -> Local, no time zone
+OffsetDateTime, OffsetTime -> Time with an offset from Greenwich
+ZonedDateTime -> LocalDateTime with a time zone
+Duration, Period -> Time span
+Instant -> Timestamp
+Formatting -> Easy and thread-safe formatting
