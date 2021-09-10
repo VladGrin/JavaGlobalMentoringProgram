@@ -1,17 +1,15 @@
 package com.epam.cdp.m2.hw2.aggregator.performance;
 
 import com.epam.cdp.m2.hw2.aggregator.*;
-import javafx.util.Pair;
 import org.junit.Test;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class PerformanceTest {
@@ -43,70 +41,40 @@ public class PerformanceTest {
 
     @Test
     public void countPerformanceSumMethod() {
-        Instant start = Instant.now();
-        int sum = java7Aggregator.sum(numbers);
-        Instant end = Instant.now();
-        System.out.println("Java7Aggregator sum method duration =         " + Duration.between(start, end) + ", Sum = " + sum);
+        benchmark(() -> java7Aggregator.sum(numbers), "Java7Aggregator");
+        benchmark(() -> java7ParallelAggregator.sum(numbers), "Java7ParallelAggregator");
+        benchmark(() -> java8Aggregator.sum(numbers), "Java8Aggregator");
+        benchmark(() -> java8ParallelAggregator.sum(numbers), "Java8ParallelAggregator");
 
-        start = Instant.now();
-        sum = java7ParallelAggregator.sum(numbers);
-        end = Instant.now();
-        System.out.println("Java7ParallelAggregator sum method duration = " + Duration.between(start, end) + ", Sum = " + sum);
-
-        start = Instant.now();
-        sum = java8Aggregator.sum(numbers);
-        end = Instant.now();
-        System.out.println("Java8Aggregator sum method duration =         " + Duration.between(start, end) + ", Sum = " + sum);
-
-        start = Instant.now();
-        sum = java8ParallelAggregator.sum(numbers);
-        end = Instant.now();
-        System.out.println("Java8ParallelAggregator sum method duration = " + Duration.between(start, end) + ", Sum = " + sum);
     }
 
     @Test
     public void countPerformanceMostFrequentWordsMethod() {
-        Instant start = Instant.now();
-        List<Pair<String, Long>> mostFrequentWords = java7Aggregator.getMostFrequentWords(words, 4);
-        Instant end = Instant.now();
-        System.out.println("Java7Aggregator mostFrequentWords method duration =         " + Duration.between(start, end) + ", MostFrequentWords = " + mostFrequentWords);
-
-        start = Instant.now();
-        mostFrequentWords = java7ParallelAggregator.getMostFrequentWords(words, 4);
-        end = Instant.now();
-        System.out.println("Java7ParallelAggregator mostFrequentWords method duration = " + Duration.between(start, end) + ", MostFrequentWords = " + mostFrequentWords);
-
-        start = Instant.now();
-        mostFrequentWords = java8Aggregator.getMostFrequentWords(words, 4);
-        end = Instant.now();
-        System.out.println("Java8Aggregator mostFrequentWords method duration =         " + Duration.between(start, end) + ", MostFrequentWords = " + mostFrequentWords);
-
-        start = Instant.now();
-        mostFrequentWords = java8ParallelAggregator.getMostFrequentWords(words, 4);
-        end = Instant.now();
-        System.out.println("Java8ParallelAggregator mostFrequentWords method duration = " + Duration.between(start, end) + ", MostFrequentWords = " + mostFrequentWords);
+        benchmark(() -> java7Aggregator.getMostFrequentWords(words, 4), "Java7Aggregator mostFrequentWords");
+        benchmark(() -> java7ParallelAggregator.getMostFrequentWords(words, 4), "Java7ParallelAggregator mostFrequentWords");
+        benchmark(() -> java8Aggregator.getMostFrequentWords(words, 4), "Java8Aggregator mostFrequentWords");
+        benchmark(() -> java8ParallelAggregator.getMostFrequentWords(words, 4), "Java8ParallelAggregator mostFrequentWords");
     }
 
     @Test
     public void countPerformanceDuplicatesMethod() {
-        Instant start = Instant.now();
-        List<String> duplicates = java7Aggregator.getDuplicates(words, 4);
-        Instant end = Instant.now();
-        System.out.println("Java7Aggregator getDuplicates method duration =         " + Duration.between(start, end) + ", Duplicates = " + duplicates);
+        benchmark(() -> java7Aggregator.getDuplicates(words, 4), "Java7Aggregator getDuplicates");
+        benchmark(() -> java7ParallelAggregator.getDuplicates(words, 4), "Java7ParallelAggregator getDuplicates");
+        benchmark(() -> java8Aggregator.getDuplicates(words, 4), "Java8Aggregator getDuplicates");
+        benchmark(() -> java8ParallelAggregator.getDuplicates(words, 4), "Java8ParallelAggregator getDuplicates");
+    }
 
-        start = Instant.now();
-        duplicates = java7ParallelAggregator.getDuplicates(words, 4);
-        end = Instant.now();
-        System.out.println("Java7ParallelAggregator getDuplicates method duration = " + Duration.between(start, end) + ", Duplicates = " + duplicates);
+    private <T> void benchmark(Supplier<T> aggregator, String title) {
+        int repetitions = 10;
 
-        start = Instant.now();
-        duplicates = java8Aggregator.getDuplicates(words, 4);
-        end = Instant.now();
-        System.out.println("Java8Aggregator getDuplicates method duration =         " + Duration.between(start, end) + ", Duplicates = " + duplicates);
+        long start = System.nanoTime();
+        T result = null;
+        for (int i = 0; i < repetitions; i++) {
+            result = aggregator.get();
+        }
+        long end = System.nanoTime();
 
-        start = Instant.now();
-        duplicates = java8ParallelAggregator.getDuplicates(words, 4);
-        end = Instant.now();
-        System.out.println("Java8ParallelAggregator getDuplicates method duration = " + Duration.between(start, end) + ", Duplicates = " + duplicates);
+        double avgDuration = ((end - start) / (repetitions * 1_000_000_000d));
+        System.out.println(title + " method duration = " + avgDuration + ", Result = " + result);
     }
 }
