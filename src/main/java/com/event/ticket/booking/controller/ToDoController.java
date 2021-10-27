@@ -1,7 +1,7 @@
-package com.apress.todo.controller;
+package com.event.ticket.booking.controller;
 
-import com.apress.todo.domain.ToDo;
-import com.apress.todo.repository.ToDoRepository;
+import com.event.ticket.booking.dao.ToDoDao;
+import com.event.ticket.booking.domain.ToDo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,10 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("/")
 public class ToDoController {
 
-    private ToDoRepository repository;
+    private ToDoDao repository;
 
     @Autowired
-    public ToDoController(ToDoRepository repository) {
+    public ToDoController(ToDoDao repository) {
         this.repository = repository;
     }
 

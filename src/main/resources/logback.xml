@@ -19,7 +19,7 @@
         <appender-ref ref="STDOUT"/>
     </logger>
 
-    <logger name="com.apress.todo" level="debug" additivity="false">
+    <logger name="com.event.ticket.booking" level="debug" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
