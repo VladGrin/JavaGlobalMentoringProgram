@@ -1,14 +1,29 @@
 package com.event.ticket.booking.dao;
 
 import com.event.ticket.booking.domain.Event;
-import org.springframework.stereotype.Repository;
+import com.event.ticket.booking.utils.DaoUtils;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+@Slf4j
 public class EventDao implements CommonDao<Event> {
 
-    private static final Map<String, Event> events = new HashMap<>();
+    private final Map<String, Event> events = new ConcurrentHashMap<>();
+    @Setter
+    private String path;
+
+    public void init() {
+        try {
+            events.putAll(DaoUtils.uploadEvents(path));
+            log.info("PATH: {},  EVENTS DATA: {}", path, events);
+        } catch (IOException e) {
+            log.info("Can not upload events by path: {}", path);
+        }
+    }
 
     @Override
     public Event save(Event entity) {
@@ -19,6 +34,7 @@ public class EventDao implements CommonDao<Event> {
             entity = result;
         }
         events.put(entity.getEventId(), entity);
+        log.info("Saved event to Map {}", entity);
         return entity;
     }
 
@@ -31,6 +47,7 @@ public class EventDao implements CommonDao<Event> {
     @Override
     public void delete(Event entity) {
         events.remove(entity.getEventId());
+        log.info("Removed event from Map {}", entity);
     }
 
     @Override

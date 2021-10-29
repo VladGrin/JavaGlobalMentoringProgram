@@ -22,7 +22,9 @@ public interface BookingFacade {
 
     List<Event> getAllEvents();
 
-    Ticket buyTicket(User user, Event event, LocalDateTime dateTime);
+    Ticket bookEvent(User user, Event event, LocalDateTime dateTime);
+
+    Ticket cancelBooking(User user, Event event) throws EntityNotFoundException;
 
     List<Ticket> getTicketsByUser(User user);
 

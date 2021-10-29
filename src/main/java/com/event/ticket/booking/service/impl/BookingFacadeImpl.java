@@ -8,21 +8,19 @@ import com.event.ticket.booking.service.BookingFacade;
 import com.event.ticket.booking.service.EventService;
 import com.event.ticket.booking.service.TicketService;
 import com.event.ticket.booking.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Service
+@Slf4j
+@AllArgsConstructor
 public class BookingFacadeImpl implements BookingFacade {
 
-    @Autowired
     private UserService userService;
-    @Autowired
     private EventService eventService;
-    @Autowired
     private TicketService ticketService;
 
     @Override
@@ -32,7 +30,9 @@ public class BookingFacadeImpl implements BookingFacade {
 
     @Override
     public User getUser(String userId) throws EntityNotFoundException {
-        return userService.findUserById(userId);
+        User userById = userService.findUserById(userId);
+        log.info("Found user {} by id {}", userById, userId);
+        return userById;
     }
 
     @Override
@@ -47,7 +47,9 @@ public class BookingFacadeImpl implements BookingFacade {
 
     @Override
     public Event getEvent(String eventId) throws EntityNotFoundException {
-        return eventService.findEventById(eventId);
+        Event eventById = eventService.findEventById(eventId);
+        log.info("Found event {} by id {}", eventById, eventId);
+        return eventById;
     }
 
     @Override
@@ -56,25 +58,42 @@ public class BookingFacadeImpl implements BookingFacade {
     }
 
     @Override
-    public Ticket buyTicket(User user, Event event, LocalDateTime dateTime) {
+    public Ticket bookEvent(User user, Event event, LocalDateTime dateTime) {
         Ticket ticket = new Ticket();
         ticket.setUserId(user.getUserId());
         ticket.setEventId(event.getEventId());
         ticket.setDateTime(dateTime);
-        return ticketService.saveTicket(ticket);
+        Ticket saveTicket = ticketService.saveTicket(ticket);
+        log.info("Book {} by User {} Event {} date {}", saveTicket, user, event, dateTime);
+        return saveTicket;
+    }
+
+    @Override
+    public Ticket cancelBooking(User user, Event event) throws EntityNotFoundException {
+        Ticket ticket = ticketService.findAllTickets().stream()
+                .filter(t -> t.getUserId().equals(user.getUserId()))
+                .filter(t -> t.getEventId().equals(event.getEventId()))
+                .findAny().orElseThrow(EntityNotFoundException::new);
+        ticketService.deleteTicket(ticket);
+        log.info("Canceled ticket {}", ticket);
+        return ticket;
     }
 
     @Override
     public List<Ticket> getTicketsByUser(User user) {
-        return ticketService.findAllTickets().stream()
+        List<Ticket> tickets = ticketService.findAllTickets().stream()
                 .filter(ticket -> ticket.getUserId().equals(user.getUserId()))
                 .collect(Collectors.toList());
+        log.info("Found tickets {} by User {}", tickets, user);
+        return tickets;
     }
 
     @Override
     public List<Ticket> getTicketsByEvent(Event event) {
-        return ticketService.findAllTickets().stream()
+        List<Ticket> tickets = ticketService.findAllTickets().stream()
                 .filter(ticket -> ticket.getEventId().equals(event.getEventId()))
                 .collect(Collectors.toList());
+        log.info("Found tickets {} by Event {}", tickets, event);
+        return tickets;
     }
 }

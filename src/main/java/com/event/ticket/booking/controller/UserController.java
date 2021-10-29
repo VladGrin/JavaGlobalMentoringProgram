@@ -3,7 +3,7 @@ package com.event.ticket.booking.controller;
 import com.event.ticket.booking.domain.User;
 import com.event.ticket.booking.exception.EntityNotFoundException;
 import com.event.ticket.booking.service.BookingFacade;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
+    @Setter
     private BookingFacade bookingFacade;
 
     @GetMapping
@@ -35,11 +35,3 @@ public class UserController {
         }
     }
 }
-//[
-//        {
-//        "userId": "45c6eff5-792e-46f0-b293-59115e18239e",
-//        "firstName": "Matv",
-//        "lastName": "Grin",
-//        "email": "matv436887@gmail.com"
-//        }
-//        ]

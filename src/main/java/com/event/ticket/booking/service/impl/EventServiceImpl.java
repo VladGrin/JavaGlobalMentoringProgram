@@ -4,15 +4,13 @@ import com.event.ticket.booking.dao.CommonDao;
 import com.event.ticket.booking.domain.Event;
 import com.event.ticket.booking.exception.EntityNotFoundException;
 import com.event.ticket.booking.service.EventService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@Service
+@AllArgsConstructor
 public class EventServiceImpl implements EventService {
 
-    @Autowired
     private CommonDao<Event> eventDao;
 
     @Override

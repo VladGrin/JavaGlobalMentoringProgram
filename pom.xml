@@ -16,7 +16,7 @@
         <jstl.version>1.2</jstl.version>
         <servlet.version>3.1.0</servlet.version>
         <bootstrap.version>3.3.7</bootstrap.version>
-        <jackson.version>2.9.2</jackson.version>
+        <jackson.version>2.13.0</jackson.version>
         <webjars.version>0.32</webjars.version>
         <!--   Spring -->
         <spring-framework.version>5.2.12.RELEASE</spring-framework.version>
@@ -27,11 +27,12 @@
         <!--  Drivers -->
         <h2.version>1.4.197</h2.version>
         <!--  Journal -->
-        <slf4j.version>1.7.25</slf4j.version>
-        <logpack.version>1.2.3</logpack.version>
-        <lombok.version>1.18.16</lombok.version>
+        <slf4j.version>1.7.32</slf4j.version>
+        <logpack.version>1.2.6</logpack.version>
+        <lombok.version>1.18.22</lombok.version>
         <!--  Test -->
         <junit.version>4.13.2</junit.version>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencies>
@@ -93,6 +94,11 @@
             <version>${jackson.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
             <version>${jackson.version}</version>
@@ -106,15 +112,27 @@
         </dependency>
         <!--    Test    -->
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-framework.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>todo</finalName>
+        <finalName>booking</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

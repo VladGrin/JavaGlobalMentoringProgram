@@ -1,25 +1,41 @@
 package com.event.ticket.booking.dao;
 
 import com.event.ticket.booking.domain.Ticket;
-import org.springframework.stereotype.Repository;
+import com.event.ticket.booking.utils.DaoUtils;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-@Repository
+@Slf4j
 public class TicketDao implements CommonDao<Ticket> {
 
-    private static final Map<String, Ticket> tickets = new HashMap<>();
+    private final Map<String, Ticket> tickets = new ConcurrentHashMap<>();
+    @Setter
+    private String path;
+
+    public void init() {
+        try {
+            tickets.putAll(DaoUtils.uploadTickets(path));
+            log.info("PATH: {}, TICKETS DATA: {}", path, tickets);
+        } catch (IOException e) {
+            log.info("Can not upload tickets by path: {}", path);
+        }
+    }
 
     @Override
     public Ticket save(Ticket entity) {
         Ticket result = tickets.get(entity.getTicketId());
-        if(Objects.nonNull(result)) {
+        if (Objects.nonNull(result)) {
             result.setUserId(entity.getUserId());
             result.setEventId(entity.getEventId());
             result.setDateTime(entity.getDateTime());
             entity = result;
         }
         tickets.put(entity.getTicketId(), entity);
+        log.info("Saved ticket to Map {}", entity);
         return entity;
     }
 
@@ -32,6 +48,7 @@ public class TicketDao implements CommonDao<Ticket> {
     @Override
     public void delete(Ticket entity) {
         tickets.remove(entity.getTicketId());
+        log.info("Removed ticket from Map {}", entity);
     }
 
     @Override
@@ -41,6 +58,6 @@ public class TicketDao implements CommonDao<Ticket> {
 
     @Override
     public List<Ticket> findAll() {
-        return new ArrayList<>(tickets.values());
+        return new ArrayList<>(this.tickets.values());
     }
 }

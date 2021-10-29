@@ -3,7 +3,7 @@ package com.event.ticket.booking.controller;
 import com.event.ticket.booking.domain.Event;
 import com.event.ticket.booking.exception.EntityNotFoundException;
 import com.event.ticket.booking.service.BookingFacade;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.Setter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("events")
 public class EventController {
 
-    @Autowired
+    @Setter
     private BookingFacade bookingFacade;
 
     @GetMapping
@@ -35,8 +35,3 @@ public class EventController {
         }
     }
 }
-//{
-//        "eventId": "d0f61c11-4ed3-4e90-857f-486ace9e389a",
-//        "eventName": "Java Conf",
-//        "basePrice": 99.9
-//        }
