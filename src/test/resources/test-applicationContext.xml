@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+    <context:component-scan base-package="com.event.ticket.booking"/>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper" ref="jsonMapper"/>
+            </bean>
+            <bean class="org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter">
+                <property name="objectMapper" ref="xmlMapper"/>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="jsonMapper" class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+        <property name="simpleDateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+    </bean>
+
+    <bean id="xmlMapper" parent="jsonMapper">
+        <property name="createXmlMapper" value="true"/>
+    </bean>
+
+    <mvc:resources mapping="/webjars/**" location="classpath:META-INF/resources/webjars/"/>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="userDao" class="com.event.ticket.booking.dao.UserDao" init-method="init">
+        <property name="path" value="${users.data.path}"/>
+    </bean>
+
+    <bean id="eventDao" class="com.event.ticket.booking.dao.EventDao" init-method="init">
+        <property name="path" value="${events.data.path}"/>
+    </bean>
+
+    <bean id="ticketDao" class="com.event.ticket.booking.dao.TicketDao" init-method="init">
+        <property name="path" value="${tickets.data.path}"/>
+    </bean>
+
+    <bean id="userService" class="com.event.ticket.booking.service.impl.UserServiceImpl" autowire="byName"/>
+
+    <bean id="eventService" class="com.event.ticket.booking.service.impl.EventServiceImpl" autowire="byName"/>
+
+    <bean id="ticketService" class="com.event.ticket.booking.service.impl.TicketServiceImpl" autowire="byName"/>
+
+    <bean id="bookingFacade" class="com.event.ticket.booking.service.impl.BookingFacadeImpl">
+        <constructor-arg ref="userService"/>
+        <constructor-arg ref="eventService"/>
+        <constructor-arg ref="ticketService"/>
+    </bean>
+
+    <bean id="userController" class="com.event.ticket.booking.controller.UserController">
+        <property name="bookingFacade" ref="bookingFacade"/>
+    </bean>
+
+    <bean id="eventController" class="com.event.ticket.booking.controller.EventController">
+        <property name="bookingFacade" ref="bookingFacade"/>
+    </bean>
+
+    <bean id="ticketController" class="com.event.ticket.booking.controller.TicketController">
+        <property name="bookingFacade" ref="bookingFacade"/>
+    </bean>
+</beans>
