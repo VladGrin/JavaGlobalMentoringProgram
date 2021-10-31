@@ -1,13 +1,13 @@
-package com.apress.spring;
+package com.epam.spring;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class SpringBootSimpleApplicationTests {
+class SpringBootGreetingApplicationTest {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
