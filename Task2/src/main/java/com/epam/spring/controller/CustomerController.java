@@ -62,4 +62,9 @@ public class CustomerController {
     public CustomerValidationError handleException(Exception exception) {
         return new CustomerValidationError(exception.getMessage());
     }
+
+    @RequestMapping(value = "/products")
+    public String getProductName() {
+        return "Honey";
+    }
 }
