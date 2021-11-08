@@ -19,13 +19,12 @@ public class UserProfileServiceImplTest {
     private UserProfileServiceImpl userProfileService;
     @Mock
     private UserProfileRepository userProfileRepository;
-    private UserProfileEntity userProfileEntity;
-    private String email = "test@test.com";
+    private final String email = "test@test.com";
 
     @Before
     public void init() {
         userProfileService = new UserProfileServiceImpl(userProfileRepository);
-        userProfileEntity = new UserProfileEntity();
+        UserProfileEntity userProfileEntity = new UserProfileEntity();
         userProfileEntity.setUserAccountEntity(UserAccountEntity.builder().email(email).build());
     }
 
