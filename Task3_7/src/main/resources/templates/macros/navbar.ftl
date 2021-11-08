@@ -6,14 +6,6 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="navbar-nav ml-auto ml-5">
-
-
-            <li class="nav-item active">
-                <a class="nav-link" href="/">Home </a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="https://www.epam.com/about/newsroom">News </a>
-            </li>
             <li class="form-inline mt-2 mt-md-0">
                 <a id="login" class="btn btn-outline-light my-2 my-sm-0" href="/login" role="button">Login</a>
             </li>
