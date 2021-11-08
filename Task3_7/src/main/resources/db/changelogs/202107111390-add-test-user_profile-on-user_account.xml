@@ -1,0 +1,15 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="202107111390" author="Volodymyr_Hrinchenko">
+        <insert tableName="user_profiles" schemaName="${schema.name}">
+            <column name="id" value="1"/>
+            <column name="first_name" value="TEST"/>
+            <column name="last_name" value="TEST"/>
+            <column name="account_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
