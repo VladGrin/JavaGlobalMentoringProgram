@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS event;
+CREATE TABLE event
+(
+    id BIGINT NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    place VARCHAR(255) NOT NULL,
+    speaker VARCHAR(255) NOT NULL,
+    event_type VARCHAR(255) NOT NULL,
+    date_time TIMESTAMP
+);
